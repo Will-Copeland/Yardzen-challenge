@@ -73,7 +73,7 @@ function ZoneInfoList(props) {
             return <CircularProgress />
         }
         
-        return zipZones.map(zone => {
+        return zipZones.map((zone, index) => {
             // Looks like your API returns an empty object for an
             // invalid zone
             if (Object.keys(zone).length === 0) {
@@ -91,7 +91,18 @@ function ZoneInfoList(props) {
                 <React.Fragment>
                     <ListItem className={classes.listItem}>
                         <div className={classes.zone}>
+                            
                             <div className={classes.zoneTitle}>
+                                <Typography 
+                                    style={{
+                                        borderRight: "1px solid black",
+                                        marginRight: "2rem",
+                                        padding: "0.25rem"
+                                     }}
+                                    variant="h4"
+                                >
+                                    #{index + 1}
+                                </Typography>
                                 <Typography className={classes.zipCode} variant="h4">{zone.zipcode}</Typography>
                                 <Typography className={classes.zoneCode} variant="h5">{zone.zone}</Typography>
                             </div>
