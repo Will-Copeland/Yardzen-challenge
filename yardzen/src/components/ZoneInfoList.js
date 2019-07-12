@@ -79,7 +79,7 @@ function ZoneInfoList(props) {
             if (Object.keys(zone).length === 0) {
                 // could add logic to display the offending zip code
                 return (
-                <Typography>
+                <Typography key={index}>
                     Bad Error handling here to tell
                      you your Zip Code is Invalid
                 </Typography>
@@ -88,8 +88,8 @@ function ZoneInfoList(props) {
 
             // render each zone info item/component
             return (
-                <React.Fragment>
-                    <ListItem className={classes.listItem}>
+                <React.Fragment key={index}>
+                    <ListItem  className={classes.listItem}>
                         <div className={classes.zone}>
                             
                             <div className={classes.zoneTitle}>

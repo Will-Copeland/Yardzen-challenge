@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Typography, TextField, List, Paper, Divider, Button } from '@material-ui/core';
+import { Typography, TextField, Paper, Divider, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/styles';
 
 const styles = {
@@ -44,8 +44,10 @@ function ZipForm(props) {
 
     function handleSubmit() {
         const { fetchZoneInfo } = props;
-
+        
         fetchZoneInfo(zipCodesList);
+
+        setZipCodesList([]);
     }
     
     return (
@@ -53,6 +55,7 @@ function ZipForm(props) {
             <Typography>Enter Zip Code for Hardiness results</Typography>
             <Divider />
             <TextField 
+                value={zipCodesList}
                 className={classes.textField}
                 onChange={e => handleChange(e.target.value)}
             />
