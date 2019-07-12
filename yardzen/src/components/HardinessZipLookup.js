@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
 import ZipForm from './ZipForm';
 import { withStyles } from '@material-ui/styles';
+import ZoneInfoList from './ZoneInfoList';
 
 const styles = {
     root: {
         marginTop: '2rem',
         display: 'flex',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        margin: "auto"
     }
 };
 
@@ -14,6 +16,7 @@ function HardinessZipLookup(props) {
     const { classes } = props;
 
     const [zoneInfo, setZoneInfo] = useState([]);
+    const [loading, setLoading] = useState(false)
 
     function parseStrings(arr) {
         // removes spaces on submission. 
@@ -26,25 +29,28 @@ function HardinessZipLookup(props) {
         return arr;
     }
 
-    function fetchZoneInfo(codeArray) {
-        parseStrings(codeArray);
-
-        codeArray.map(zipCode => {
-            fetch(`https://c0bra.api.stdlib.com/zipcode-to-hardiness-zone/?zipcode=${zipCode}`
+     function fetchZoneInfo(codeArray) {
+         setLoading(true);
+        const parsedArr = parseStrings(codeArray);
+        const promises = parsedArr.map(zipCode => {
+             return fetch(`https://c0bra.api.stdlib.com/zipcode-to-hardiness-zone/?zipcode=${zipCode}`
             ).then(resp => resp.json()).then(data => {
-                setZoneInfo(...zoneInfo, data);
-            });
+
+                return Promise.resolve(data);
+            }).catch(e => Promise.reject(new Error(e)))
         })
-      
+
+        Promise.all(promises).then(value => {
+            setZoneInfo(value); 
+            setLoading(false);
+        });
     };
 
-
-    console.log(zoneInfo);
     
     return (
         <div className={classes.root}>
-            <ZipForm fetchZoneInfo={fetchZoneInfo} />
-            {/* RenderedList */}
+            <ZipForm fetchZoneInfo={fetchZoneInfo} loading={loading} />
+            <ZoneInfoList loading={loading} zipZones={zoneInfo} />
         </div>
     )
 }

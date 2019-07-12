@@ -6,7 +6,8 @@ const styles = {
     root: {
         padding: "1rem",
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        height: "fit-content"
     },
     textField: {
         margin: "1rem"
@@ -14,9 +15,8 @@ const styles = {
 }
 
 function ZipForm(props) {
-    const { classes } = props;
+    const { classes, loading } = props;
     const [zipCodesList, setZipCodesList] = useState([]);
-    const [inputError, setInputError] = useState();
 
     function handleChange(zipCodeList) {
         // Splits list poorly. Would spend more time on this IRL.
@@ -34,9 +34,9 @@ function ZipForm(props) {
 
         // Doesnt check that there are no letters, or that the zip in fact
         // even exists
-        if (!zipCodesList[0]) {
+        if (!zipCodesList[0] || loading) {
             return true;
-        } else if (zipCodesList[0].length < 5) {
+        } else if (zipCodesList[0].length < 5 || loading) {
             return true;
         }
         return false
@@ -59,7 +59,9 @@ function ZipForm(props) {
             <Button 
                 onClick={() => handleSubmit()}
                 disabled={handleSomeConstraints()}
-            >Submit</Button>
+            >
+                {loading ? "Loading" : "Submit"}
+            </Button>
             
         </Paper>
     )
